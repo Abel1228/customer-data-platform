@@ -38,3 +38,53 @@ This project aims to build an end-to-end data pipeline using:
 
 
 
+\## 🥉 Bronze Layer Design
+
+
+
+The Bronze layer stores raw data ingested from source systems without transformation.
+
+
+
+\### Sources:
+
+
+
+\* CRM system
+
+\* ERP system
+
+
+
+\### Tables:
+
+
+
+\*\*CRM\*\*
+
+
+
+\* bronze\_crm\_cust\_info
+
+\* bronze\_crm\_prd\_info
+
+\* bronze\_crm\_sales\_details
+
+
+
+\*\*ERP\*\*
+
+
+
+\* bronze\_erp\_cust\_az12
+
+\* bronze\_erp\_loc\_a101
+
+\* bronze\_erp\_px\_cat\_g1v2
+
+
+
+This design ensures traceability, scalability, and separation of source systems.
+
+
+
