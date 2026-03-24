@@ -1,0 +1,13 @@
+# Data files
+data/
+
+# Spark / Hadoop artifacts
+*.crc
+_SUCCESS
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
