@@ -1,292 +1,238 @@
-\# Customer Data Platform
+# 🚀 Customer Data Platform
 
+An end-to-end data engineering project implementing the **Medallion Architecture (Bronze → Silver → Gold)** using **PySpark**.
 
+This platform ingests and integrates data from multiple sources (**CRM & ERP systems**) and transforms it into analytics-ready datasets.
 
-This project implements an end-to-end data pipeline using the Medallion Architecture (Bronze, Silver, Gold) with PySpark.
+---
 
+## 📌 Overview
 
+The goal of this project is to design a scalable data platform that:
 
-\---
+* Ingests raw data from different systems
+* Cleans and standardizes inconsistent formats
+* Integrates datasets into a unified model
+* Prepares data for analytics and reporting
 
+---
 
-
-\## 🚀 Overview
-
-
-
-The goal of this project is to design and build a scalable data platform that ingests, transforms, and aggregates data from multiple sources (CRM \& ERP) into business-ready insights.
-
-
-
-\---
-
-
-
-\## 🏗️ Architecture
-
-
+## 🏗️ Architecture
 
 ```
-
-Raw Data → Bronze → Silver → Gold
-
-&#x20;        (CSV)   (Parquet)  (Aggregated Insights)
-
+        ┌────────────┐
+        │   Raw CSV      │
+        └─────┬──────┘
+              ↓
+        🥉 Bronze Layer
+        (Raw Ingestion)
+              ↓
+        🥈 Silver Layer
+   (Clean + Transform + Join)
+              ↓
+        🥇 Gold Layer
+     (Business Aggregates)
 ```
 
+---
 
+## 🧰 Tech Stack
 
-\* \*\*Bronze Layer\*\* → Raw ingestion (no transformation)
+* **PySpark** (data processing)
+* **Python**
+* **Hadoop (Windows setup with winutils)**
+* **Parquet** (storage format)
 
-\* \*\*Silver Layer\*\* → Cleaned and transformed data
+### 🔜 Planned
 
-\* \*\*Gold Layer\*\* → Business-level aggregations
+* dbt (data modeling)
+* Airbyte (data ingestion)
+* Databricks (cloud platform)
+* Power BI (dashboarding)
 
+---
 
-
-\---
-
-
-
-\## 🧰 Tech Stack
-
-
-
-\* PySpark
-
-\* Hadoop (Windows setup with winutils)
-
-\* Python
-
-\* (Planned) dbt, Airbyte, Databricks
-
-
-
-\---
-
-
-
-\## 📂 Project Structure
-
-
+## 📂 Project Structure
 
 ```
-
 customer-data-platform/
-
 │
-
 ├── data/
-
-│   ├── crm/
-
-│   ├── bronze/
-
-│   ├── silver/
-
-│   └── gold/
-
+│   ├── crm/              # Raw CRM CSV files
+│   ├── erp/              # Raw ERP CSV files
+│   ├── bronze/           # Raw ingested parquet
+│   ├── silver/           # Cleaned & transformed data
+│   └── gold/             # Aggregated business data
 │
-
 ├── notebooks/
-
 │   ├── bronze/
-
-│   │   └── bronze\_ingestion.py
-
+│   │   ├── bronze_erp_loc_a101.py
+│   │   ├── bronze_erp_cust_az12.py
+│   │   ├── bronze_crm_cust_info.py
+│   │   ├── bronze_crm_prd_info.py
+│   │   └── bronze_crm_sales_details.py
+│   │
 │   ├── silver/
-
-│   │   └── silver\_transform.py
-
+│   │   ├── silver_erp_loc_a101.py
+│   │   ├── silver_erp_cust_az12.py
+│   │   ├── silver_crm_cust_info.py
+│   │   ├── silver_crm_prd_info.py
+│   │   ├── silver_crm_sales_details.py
+│   │   └── silver_customer.py   # 🔥 unified customer
+│   │
 │   └── gold/
-
-│       └── gold\_aggregation.py
-
+│       └── (coming soon)
 │
-
 └── README.md
-
 ```
 
+---
 
+## 🥉 Bronze Layer (Raw Ingestion)
 
-\---
+* Loads raw CSV files **as-is**
+* No transformations applied
+* Stores data in **Parquet format**
 
+### Data Sources
 
+**ERP**
 
-\## 🥉 Bronze Layer
+* `CUST_AZ12.csv` → customer demographics
+* `LOC_A101.csv` → customer location
+* `PX_CAT_G1V2.csv` → product categories
 
+**CRM**
 
+* `cust_info.csv` → customer profile
+* `prd_info.csv` → product information
+* `sales_details.csv` → sales transactions
 
-\* Ingests raw CRM data from CSV
+---
 
-\* Stores data as-is in partitioned format
+## 🥈 Silver Layer (Transformation & Integration)
 
+This is where the real engineering happens 💪
 
+### Key transformations:
 
-Example:
+* Column standardization (snake_case)
+* Trimming & cleaning dirty strings
+* Date formatting
+* Deduplication
+* Business logic mapping (e.g., marital status)
+* Data joins across systems
 
+---
 
+### 🔥 Unified Customer Table
 
-\* `bronze\_crm\_cust\_info`
+The highlight of the project:
 
+`silver_customer.py`
 
+Combines:
 
-\---
+* ERP customer data (birthdate, gender)
+* CRM customer data (name, marital status)
 
+### Result:
 
-
-\## 🥈 Silver Layer
-
-
-
-\* Cleans and transforms raw data
-
-\* Standardizes column names
-
-\* Derives new fields
-
-
-
-Example transformation:
-
-
-
-\* `cst\_marital\_status → marital\_status (Married / Single)`
-
-
-
-\---
-
-
-
-\## 🥇 Gold Layer
-
-
-
-\* Aggregates data for business use
-
-
-
-Example:
-
-
-
-\* Customer count by marital status
-
-
-
-\---
-
-
-
-\## ✅ Current Progress
-
-
-
-\* \[x] Project setup
-
-\* \[x] Bronze layer (ingestion)
-
-\* \[x] Silver layer (transformation)
-
-\* \[x] Gold layer (aggregation)
-
-\* \[ ] ERP data integration
-
-\* \[ ] dbt modeling
-
-\* \[ ] Airbyte ingestion
-
-\* \[ ] Dashboard / visualization
-
-
-
-\---
-
-
-
-\## ▶️ How to Run
-
-
-
-\### 1. Bronze Layer
-
-
+A **single customer view**:
 
 ```
-
-python notebooks/bronze/bronze\_ingestion.py
-
+customer_id
+first_name
+last_name
+gender
+birth_date
+marital_status
 ```
 
+---
 
+## 🥇 Gold Layer (Coming Next)
 
-\### 2. Silver Layer
+This layer will provide business-level insights such as:
 
+* Customer segmentation
+* Sales performance
+* Revenue by product/category
+* Customer distribution by country
 
+---
+
+## ✅ Current Progress
+
+* [x] Project setup
+* [x] Bronze layer (ERP + CRM ingestion)
+* [x] Silver layer (cleaning & transformation)
+* [x] Unified customer table (cross-source join)
+* [ ] Gold layer (aggregations)
+* [ ] dbt integration
+* [ ] Airbyte ingestion
+* [ ] Dashboard / visualization
+
+---
+
+## ▶️ How to Run
+
+### 1️⃣ Bronze Layer
+
+Run ingestion scripts:
 
 ```
-
-python notebooks/silver/silver\_transform.py
-
+python notebooks/bronze/bronze_erp_loc_a101.py
+python notebooks/bronze/bronze_erp_cust_az12.py
+python notebooks/bronze/bronze_crm_cust_info.py
 ```
 
+---
 
+### 2️⃣ Silver Layer
 
-\### 3. Gold Layer
-
-
-
-```
-
-python notebooks/gold/gold\_aggregation.py
+Run transformation scripts:
 
 ```
+python notebooks/silver/silver_erp_loc_a101.py
+python notebooks/silver/silver_erp_cust_az12.py
+python notebooks/silver/silver_crm_cust_info.py
+python notebooks/silver/silver_customer.py
+```
 
+---
 
+### 3️⃣ Output
 
-\---
+Data will be written to:
 
+```
+data/silver/
+data/gold/
+```
 
+---
 
-\## 📌 Notes
+## 📌 Notes
 
+* Data files are excluded via `.gitignore`
+* Spark outputs multiple `part-*` files + `_SUCCESS` (expected behavior)
+* Joins require careful column disambiguation (e.g., duplicate `gender` columns)
 
+---
 
-\* Data files are excluded using `.gitignore`
+## 🎯 Future Improvements
 
-\* Spark generates multiple output files (part files + \_SUCCESS), which is expected behavior
+* Add **Gold layer aggregations**
+* Introduce **dbt models**
+* Automate ingestion using **Airbyte**
+* Deploy on **Databricks**
+* Build **Power BI dashboard**
 
+---
 
+## 👤 Author
 
-\---
+**Abel Solomon**
 
-
-
-\## 🎯 Future Improvements
-
-
-
-\* Integrate Airbyte for ingestion
-
-\* Use dbt for transformations
-
-\* Load data into SQL Server
-
-\* Build Power BI dashboard
-
-
-
-\---
-
-
-
-\## 💡 Author
-
-
-
-Abel Solomon
-
-
-
+Data Engineer | PySpark | Building scalable data platforms 🚀
